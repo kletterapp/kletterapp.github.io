@@ -1,0 +1,138 @@
+<!Doctype html>
+<html lang="de">
+
+	<head>
+		<title>Klettertourenbuch Kuchl</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="2.Ebene.css">
+	</head>
+	<script>
+        loadList();
+        function loadList(){
+            //Call the php function (getListOfTours())
+            var Http = new XMLHttpRequest();
+            var url='http://localhost:8000/Php/getListOfTours.php?filter=--||--||--';
+            Http.open("GET", url,true);
+
+            Http.onload = function () {
+                //"draw" the table form the php function
+                //first split by \n
+                parts = (Http.responseText).split("\n");
+                parts.splice(parts.length-1,1);
+                string = "";
+                for(i = 0; i< parts.length; i++){
+                    description = parts[i];
+                    info = description.split("||");
+                    string += "<tr onclick = \"routeClicked('"+info[0].trim()+"')\">";
+                    string += "<td>"+info[0]+"</td>";
+                    string += "<td>"+info[1]+"</td>";
+                    string += "<td>"+info[2]+"<img id='info' src=\"Bilder/info.png\"></td>";
+                    string += "</tr>";
+                    
+                }
+                document.getElementById("t01").innerHTML += string;
+
+            };
+
+            Http.send();
+
+        }
+
+        function routeClicked(el){
+			console.log(el);
+            //open the "routeInDetail" page and pass the info of the clicked route
+            sessionStorage.setItem('tour', el);
+            location.href = "/HtmlHannah/routenDetail.html";
+        }
+
+    </script>
+	
+	<!--                       LOGIN                   -->
+	<script>
+        function logIn(){
+            usrName = document.getElementById("userName").value;
+            pw = document.getElementById("pw").value;
+
+            if(isValidText(pw)==true){
+                alert("invalid PW");
+                return 0;
+            }
+            if(isValidText(usrName)==true){
+                alert("invalid Name");
+                return 0;
+            }
+
+            //check if the password is correct!
+            var xhttp = new XMLHttpRequest();
+            xhttp.onload = function () {
+                if(this.responseText=="OK"){
+
+                    //first log out(delet all cookies)
+                    deleteAllCookies();
+                    document.cookie = usrName + '=' + pw+";path=/";
+                    alert("Angemeldet!");
+                }else{
+                    alert("Falscher Benutzername oder falsches Passwort");
+                }
+
+            };
+            xhttp.open("GET","http://localhost:8000/Php/checkPassword.php?+name="+usrName+"&pw="+pw, true);
+            xhttp.send();
+        }
+
+
+
+        function deleteAllCookies() {
+            var cookies = document.cookie.split(";");
+
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i];
+                var eqPos = cookie.indexOf("=");
+                var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;Path=/";
+            }
+        }
+
+        function isValidText(name){
+            //regexp
+            var pat = /[äöüß?=&<\\;]/i;
+            return pat.test(name);
+        }
+        
+
+    </script>
+		
+	<body>
+
+		<div class="navigation">
+			<ul>
+				<li><a href="home.html">Home</a></li>
+				<li class="active nohover"><a href="touren.html">Routen</a></li>
+				<li><a href="meinegeKlettertenTouren.html">Meine gekletterten Touren</a></li>
+				<li><a href="register.html">Registrieren</a></li>
+				<li class="anmelden" style="float:right" onclick="logIn()">Anmelden</li>
+				<li class="anmelden nohover" style="float:right">Passwort <input type="text" class="textfeld" id="pw"></li>	
+				<li class="anmelden nohover" style="float:right">User Name <input type="text" class="textfeld" id="userName"></li>
+			</ul>
+		</div>
+		
+		<div class="Ueberschrift">
+			<h1>Mein Kletterntourenbuch Kuchl</h1>
+		</div>
+		
+		<div class="hauptinhalt">
+			<h3>Routen</h3>
+			
+			<table id="t01">
+					  <tr>
+						<th>Name</th>
+						<th>Farbe</th>
+						<th>Schwierigkeit</th>
+					  </tr>
+					  
+					</table>
+		</div>
+		
+	</body>
+
+	</html>

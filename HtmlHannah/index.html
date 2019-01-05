@@ -1,0 +1,109 @@
+<!Doctype html>
+<html lang="de">
+
+	<head>
+		<title>Klettertourenbuch Kuchl</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="2.Ebene.css">
+	</head>
+
+	<!--                       LOGIN                   -->
+	<script>
+        function logIn(){
+            usrName = document.getElementById("userName").value;
+            pw = document.getElementById("pw").value;
+
+            if(isValidText(pw)==true){
+                alert("invalid PW");
+                return 0;
+            }
+            if(isValidText(usrName)==true){
+                alert("invalid Name");
+                return 0;
+            }
+
+            //check if the password is correct!
+            var xhttp = new XMLHttpRequest();
+            xhttp.onload = function () {
+                if(this.responseText=="OK"){
+
+                    //first log out(delet all cookies)
+                    deleteAllCookies();
+                    document.cookie = usrName + '=' + pw+";path=/";
+                    alert("Angemeldet!");
+                }else{
+                    alert("Falscher Benutzername oder falsches Passwort");
+                }
+
+            };
+            xhttp.open("GET","http://localhost:8000/Php/checkPassword.php?+name="+usrName+"&pw="+pw, true);
+            xhttp.send();
+        }
+
+
+
+        function deleteAllCookies() {
+            var cookies = document.cookie.split(";");
+
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i];
+                var eqPos = cookie.indexOf("=");
+                var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;Path=/";
+            }
+        }
+
+        function isValidText(name){
+            //regexp
+            var pat = /[äöüß?=&<\\;]/i;
+            return pat.test(name);
+        }
+        
+
+    </script>
+	
+	<body>
+		
+		<div class="navigation">
+			<ul>
+				<li class="active nohover"><a href="home.html">Home</a></li>
+				<li><a href="touren.html">Routen</a></li>
+				<li><a href="meinegeKlettertenTouren.html">Meine gekletterten Touren</a></li>
+				<li><a href="register.html">Registrieren</a></li>
+				<li class="anmelden" style="float:right" onclick="logIn()">Anmelden</li>
+				<li class="anmelden nohover" style="float:right">Passwort <input type="text" class="textfeld" id="pw"></li>	
+				<li class="anmelden nohover" style="float:right">User Name <input type="text" class="textfeld" id="userName"></li>
+			</ul>
+		</div>
+		
+		<div class="ueberschrift">
+			<h1>Mein Kletterntourenbuch Kuchl</h1>
+		</div>
+		
+		<div class="hauptinhalt">
+			<Button onclick="location.href = '/HtmlHannah/farbenrad.html';" style="float: left;">Farbenrad</Button>
+			<h3>Challenge der Woche</h3>
+		
+		</div>
+
+    </body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
