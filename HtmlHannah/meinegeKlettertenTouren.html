@@ -25,7 +25,7 @@
 
 				//Call the php function (getListOfTours())
 				var Http = new XMLHttpRequest();
-				var url="http://localhost:8000/Php/filterAccents.php?filter=--||--||"+usrName+"||--||--||--";
+				var url="http://kletterapp.atwebpages.com/Php/filterAccents.php?filter=--||--||"+usrName+"||--||--||--";
 				Http.open("GET", url,true);
 
 				Http.onload = function () {
@@ -88,7 +88,7 @@
                 }
 
             };
-            xhttp.open("GET","http://localhost:8000/Php/checkPassword.php?+name="+usrName+"&pw="+pw, true);
+            xhttp.open("GET","http://kletterapp.atwebpages.com/Php/checkPassword.php?+name="+usrName+"&pw="+pw, true);
             xhttp.send();
         }
 
